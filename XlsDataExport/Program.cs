@@ -9,14 +9,13 @@ namespace XlsDataExport
     {
         static void Main(string[] args)
         {
-            string sourceData = File.ReadAllText("source.txt");
+            string sourceData = File.ReadAllText(@"../../input.txt");
             DataItem deserializedData = JsonConvert.DeserializeObject<DataItem>(sourceData);
 
             IExcelDataWriter writer = new XlsDataWriter();
             writer.Write(deserializedData, "output.xls");
 
             Console.WriteLine("All done");
-            Console.ReadKey();
         }
     }
 }

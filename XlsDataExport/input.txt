@@ -1,0 +1,71 @@
+{
+   header:[
+      {
+         title:'Col1',
+         dataindex:'value1'
+      },
+      {
+         title:'Col2',
+         childs:[
+            {
+				title:'Col5',
+				childs: [
+					{
+						title:'Col6',
+						dataindex:'value2'
+					},
+					{
+						title:'Col7',
+						dataindex:'value5'
+					}
+				]
+            },
+            {
+               title:'Col3',
+               dataindex:'value3'
+            }
+         ]
+      },
+      {
+         title:'Col4',
+         dataindex:'value4'
+      }
+   ],
+   data:[
+      {
+         value1:'666',
+         value2: '234',
+         value3:'ququq',
+         value4: '632sss',
+         value5: 'asdfcczx'
+      },
+      {
+         value1:'xcvdg',
+         value2: 'cvbcf',
+         value3:'dfwefw',
+         value4: 'xcbhjh',
+         value5: ',ghghnghn'
+      },
+      {
+         value1:'rtfdg',
+         value2: '2fghfdgh34',
+         value3:' sdfg',
+         value4: 'dsdf',
+         value5: 'weerf'
+      },
+      {
+         value1:'3421',
+         value2: 'grtgdfg',
+         value3:'bgvcbc',
+         value4: '34r4f4',
+         value5: 'sfdgscgfds'
+      },
+      {
+         value1:'565tggg',
+         value2: 'cnvcbcvb',
+         value3:'cvbert34ff',
+         value4: 'xvxcvdfg',
+         value5: 'zs2333'
+      }
+   ]
+}
