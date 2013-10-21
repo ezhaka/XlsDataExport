@@ -33,7 +33,7 @@
    ],
    data:[
       {
-         value1:'666',
+         value1:'Привет',
          value2: '234',
          value3:'ququq',
          value4: '632sss',
