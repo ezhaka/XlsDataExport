@@ -11,19 +11,20 @@ namespace XlsDataExport
 {
     public class XlsDataWriter : IExcelDataWriter
     {
-        public void Write(DataItem data, string fileName)
+        public void Write(DataItem dataItem, string fileName)
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
             ISheet worksheet = workbook.CreateSheet("Main");
             IDictionary<string, int> indexToColumn = new Dictionary<string, int>();
 
             int headerHeight = 1;
-            this.GetHeaderHeight(data.Header, 1, ref headerHeight);
+            this.GetHeaderHeight(dataItem.Header, 1, ref headerHeight);
 
-            int headerWidth = WriteHeader(worksheet, data.Header, 0, 0, headerHeight, indexToColumn);
-            this.WriteData(worksheet, data.Data, headerHeight, indexToColumn);
+            int headerWidth = WriteHeader(worksheet, dataItem.Header, 0, 0, headerHeight, indexToColumn);
+            this.WriteData(worksheet, dataItem.Data, headerHeight, indexToColumn);
 
-            worksheet.SetAutoFilter(new CellRangeAddress(headerHeight - 1, headerHeight + data.Data.Count, 0, headerWidth - 1));
+            // enable sorting for for header's bottom and body
+            worksheet.SetAutoFilter(new CellRangeAddress(headerHeight - 1, headerHeight + dataItem.Data.Count, 0, headerWidth - 1));
 
             using (var fileData = new FileStream(fileName, FileMode.Create))
             {
@@ -31,6 +32,8 @@ namespace XlsDataExport
             }
         }
 
+        // recursive function
+        // returns total width of cells that have been written 
         private int WriteHeader(ISheet worksheet, IList<HeaderItem> headerItems, int rowIndex, int columnIndex, int headerHeight, IDictionary<string, int> indexToColumn)
         {
             int widthsSum = 0;
@@ -42,23 +45,23 @@ namespace XlsDataExport
                 cell.SetCellValue(headerItem.Title);
 
                 int width = 1;
-                CellRangeAddress cellRange;
+                CellRangeAddress cellRangeForMerging;
 
                 if (headerItem.Childs != null && headerItem.Childs.Any())
                 {
                     width = WriteHeader(worksheet, headerItem.Childs, rowIndex + 1, columnIndex, headerHeight, indexToColumn);
 
-                    cellRange = new CellRangeAddress(rowIndex, rowIndex, columnIndex, columnIndex + width - 1);
+                    cellRangeForMerging = new CellRangeAddress(rowIndex, rowIndex, columnIndex, columnIndex + width - 1);
                 }
                 else
                 {
-                    cellRange = new CellRangeAddress(rowIndex, headerHeight - 1, columnIndex, columnIndex);
+                    cellRangeForMerging = new CellRangeAddress(rowIndex, headerHeight - 1, columnIndex, columnIndex);
                     indexToColumn.Add(headerItem.Dataindex, columnIndex);
                 }
 
-                worksheet.AddMergedRegion(cellRange);
+                worksheet.AddMergedRegion(cellRangeForMerging);
                 cell.CellStyle = this.GetHeaderCellStyle((HSSFWorkbook)worksheet.Workbook);
-                this.AddBorderToRegion(cellRange, (HSSFSheet)worksheet);
+                this.AddBorderToRegion(cellRangeForMerging, (HSSFSheet)worksheet);
 
                 columnIndex += width;
                 widthsSum += width;
